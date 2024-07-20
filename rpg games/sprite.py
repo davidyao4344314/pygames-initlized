@@ -1,6 +1,7 @@
 import pygame
+from gravity import GravityAffected
 
-class cell(pygame.sprite.Sprite):
+class cell(GravityAffected):
     def __init__(self, x, y, scale, player_image):
         super().__init__()
         self.image = pygame.transform.scale(player_image, (int(player_image.get_width()), int(player_image.get_height() * scale)))
@@ -12,3 +13,6 @@ class cell(pygame.sprite.Sprite):
     def move(self, dx=0, dy=0):
         self.rect.x += dx * self.speed
         self.rect.y += dy * self.speed
+
+    def update(self, gravity, screen_height):
+        self.apply_gravity(gravity, screen_height)

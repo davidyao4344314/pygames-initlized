@@ -10,6 +10,9 @@ SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('RPG')
 
+# Player gravity
+gravity = 0.5
+
 # Load player image
 player_image = pygame.image.load('white_blood_cell.png')
 
@@ -25,6 +28,8 @@ while run:
     
     run = controls.handle_events()
     controls.move_player(player1)
+
+    player1.update(gravity, SCREEN_HEIGHT)
 
     pygame.display.update()
     clock.tick(60)
