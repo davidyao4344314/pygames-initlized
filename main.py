@@ -2,6 +2,7 @@
 
 import pygame
 from sprite import cell
+import controls
 
 pygame.init()
 
@@ -21,14 +22,11 @@ run = True
 clock = pygame.time.Clock()
 
 while run:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-    
-    player1.move(0, 0)  # Example move call, update as needed
-
-    screen.fill((0, 0, 0))
+    screen.fill((0, 0, 0))  # Fill the screen with black before drawing
     screen.blit(player1.image, player1.rect)
+    
+    run = controls.handle_events()
+    controls.move_player(player1)
 
     pygame.display.update()
     clock.tick(60)
