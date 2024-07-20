@@ -1,7 +1,7 @@
 import pygame
 from gravity import GravityAffected
 
-class cell(GravityAffected):
+class Boy(GravityAffected):
     def __init__(self, x, y, scale, player_image):
         super().__init__()
         self.image = pygame.transform.scale(player_image, (int(player_image.get_width()), int(player_image.get_height() * scale)))
@@ -16,3 +16,6 @@ class cell(GravityAffected):
 
     def update(self, gravity, screen_height):
         self.apply_gravity(gravity, screen_height)
+    
+    def melee_attack(self):
+        print("Melee attack")
