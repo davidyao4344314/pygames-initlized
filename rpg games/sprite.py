@@ -1,7 +1,7 @@
 import pygame
 from gravity import GravityAffected
 
-class Boy(GravityAffected):
+class cell(GravityAffected):
     def __init__(self, x, y, scale, player_image):
         super().__init__()
         self.image = pygame.transform.scale(player_image, (int(player_image.get_width()), int(player_image.get_height() * scale)))
