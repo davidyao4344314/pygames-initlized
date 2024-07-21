@@ -1,9 +1,10 @@
+# initliazing pygame 
 import pygame
 from sprite import cell  
 import controls
 
 pygame.init()
-
+#initalzing player screan 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
 
