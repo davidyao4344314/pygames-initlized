@@ -19,3 +19,6 @@ class cell(GravityAffected):
     
     def melee_attack(self):
         print("Melee attack")
+    
+    def ranged_attack(self):
+        print("Ranged attack")
