@@ -1,5 +1,5 @@
 import pygame
-from sprite import cell
+from sprite import cell  
 import controls
 
 pygame.init()
@@ -13,11 +13,12 @@ pygame.display.set_caption('RPG')
 # Player gravity
 gravity = 0.5
 
-# Load player image
+# Load player images
 player_image = pygame.image.load('white_blood_cell.png')
+attack_image = pygame.image.load('white_blood_cell_attack.png')
 
 # Initialize player instance
-player1 = cell(200, 200, 3, player_image)
+player1 = cell(200, 200, 3, player_image, attack_image)  
 
 run = True
 clock = pygame.time.Clock()
@@ -26,7 +27,7 @@ while run:
     screen.fill((0, 0, 0))  # Fill the screen with black before drawing
     screen.blit(player1.image, player1.rect)
     
-    run = controls.handle_events()
+    run = controls.handle_events(player1)
     controls.move_player(player1)
 
     player1.update(gravity, SCREEN_HEIGHT)
