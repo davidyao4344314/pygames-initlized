@@ -1,7 +1,7 @@
 import pygame
 from gravity import GravityAffected
 
-class cell(GravityAffected):
+class Cell(GravityAffected):
     def __init__(self, x, y, scale, player_image, attack_image):
         super().__init__()
         self.original_image = pygame.transform.scale(player_image, (int(player_image.get_width()), int(player_image.get_height() * scale)))
@@ -27,11 +27,12 @@ class cell(GravityAffected):
                 self.is_attacking = False
                 self.image = self.original_image
 
-    def melee_attack(self):
+    def melee_attack(self, target):
         if not self.is_attacking:
             self.is_attacking = True
             self.attack_timer = self.attack_duration
             self.image = self.attack_image
+            target.take_damage(20)
     
     def ranged_attack(self):
         print("Ranged attack")
