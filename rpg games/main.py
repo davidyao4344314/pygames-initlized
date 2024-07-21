@@ -1,10 +1,10 @@
-# initliazing pygame 
 import pygame
-from sprite import cell  
+from sprite import cell, Virus  
 import controls
 
 pygame.init()
-#initalzing player screan 
+
+# Initializing player screen
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
 
@@ -18,20 +18,35 @@ gravity = 0.5
 player_image = pygame.image.load('white_blood_cell.png')
 attack_image = pygame.image.load('white_blood_cell_attack.png')
 
+# Load virus images (same as player for now since i don't have another sprite)
+virus_image = pygame.image.load('white_blood_cell.png')
+virus_attack_image = pygame.image.load('white_blood_cell_attack.png')
+
 # Initialize player instance
-player1 = cell(200, 200, 3, player_image, attack_image)  
+player1 = cell(200, 200, 3, player_image, attack_image)
+
+# Initialize enemy instance
+enemy = Virus(600, 200, 3, virus_image, virus_attack_image)
+
+# Create sprite group for all sprites
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player1)
+all_sprites.add(enemy)
 
 run = True
 clock = pygame.time.Clock()
 
 while run:
-    screen.fill((0, 0, 0))  # Fill the screen with black before drawing
-    screen.blit(player1.image, player1.rect)
+    screen.fill((0, 0, 0))  # Fill the screen with black before drawing(as if right now since i don't have a back ground)
     
-    run = controls.handle_events(player1)
+    # Update every sprites
+    all_sprites.update(gravity, SCREEN_HEIGHT)
+    
+    # Draw every sprites
+    all_sprites.draw(screen)
+    
+    run = controls.handle_events(player1, enemy)
     controls.move_player(player1)
-
-    player1.update(gravity, SCREEN_HEIGHT)
 
     pygame.display.update()
     clock.tick(60)
