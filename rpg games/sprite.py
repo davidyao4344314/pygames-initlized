@@ -104,11 +104,12 @@ class Virus(GravityAffected):
             target.take_damage(20)
 
     """
-    This function is for ranged attack
+    This function is for ranged attack(unfinish)due to having no animation's
     """
     def ranged_attack(self):
         print("Ranged attack")
-
+    def dash_attack(self):
+        print("Dash attack")
     """
     This function is for taking damage
     """

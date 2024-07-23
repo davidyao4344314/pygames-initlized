@@ -14,7 +14,7 @@ keys = {
     pygame.K_l: False
 }
 
-def handle_events(player, enemy):
+def handle_events(player1, enemy):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
@@ -22,24 +22,22 @@ def handle_events(player, enemy):
             if event.key in keys:
                 keys[event.key] = True
             if event.key == pygame.K_k:
-                player.melee_attack(enemy)
+                player1.melee_attack(enemy)
             if event.key == pygame.K_l:
-                player.ranged_attack()
+                player1.ranged_attack()
         if event.type == pygame.KEYUP:
             if event.key in keys:
                 keys[event.key] = False
     return True
 
-def move_player(player):
+def move_player(player1):
+    dx, dy = 0, 0
     if keys[pygame.K_a]:
-        player.move(dx=-1)
+        dx = -1
     if keys[pygame.K_d]:
-        player.move(dx=1)
+        dx = 1
     if keys[pygame.K_w] or keys[pygame.K_SPACE]:
-        player.move(dy=-1)
-    if keys[pygame.K_LEFT]:
-        player.move(dx=-1)
-    if keys[pygame.K_RIGHT]:
-        player.move(dx=1)
-    if keys[pygame.K_UP]:
-        player.move(dy=-1)
+        dy = -1
+    if keys[pygame.K_s]:
+        dy = 1
+    player1.move(dx, dy)
