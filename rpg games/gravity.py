@@ -11,3 +11,4 @@ class GravityAffected(pygame.sprite.Sprite):
         if self.rect.bottom > screen_height:
             self.rect.bottom = screen_height
             self.velocity_y = 0
+    
