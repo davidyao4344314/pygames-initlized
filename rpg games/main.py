@@ -1,7 +1,7 @@
 import pygame
 from sprite import cell, Virus  
 import controls
-from menu import draw_menu, draw_setting_screen, draw_level_selection_screen, handle_menu_events
+from menu import draw_menu, handle_menu_events
 
 pygame.init()
 
@@ -59,6 +59,7 @@ run = True
 clock = pygame.time.Clock()
 
 while run:
+    # Checking if the user choosen to open the game or not
     if game_state == "game":
         screen.fill((0, 0, 0))  # Fill the screen with black before drawing
         
@@ -77,14 +78,14 @@ while run:
         # Handle movement
         run = controls.handle_events(player1, enemy)
         controls.move_player(player1)
-
+        # Healing objects 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_i:
                     healing_active = True
                 if event.key == pygame.K_ESCAPE:
                     game_state = "menu"  
-
+    # Menue option 
     elif game_state == "menu":
         draw_menu(screen)
         menu_action = handle_menu_events()

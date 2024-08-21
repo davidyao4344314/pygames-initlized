@@ -3,23 +3,14 @@ import pygame
 # Initialize Pygame 
 pygame.font.init()
 
-# Define menu options
+
+# The menu options
 menu_font = pygame.font.SysFont(None, 36)
-menu_items = ["Resume Game"]
+menu_items = ["Resume Game", "Quit"]
 menu_rects = []
 
-# The options 
-# option one for the settins 
-setting_font = pygame.font.SysFont(None, 40)
-setting_text = "Settings: Currently not available in the demo"
-setting_surface = setting_font.render(setting_text, True, (255, 255, 255))
-setting_rect = setting_surface.get_rect(center=(400, 320))
-# opiton two for the level selections
-level_font = pygame.font.SysFont(None, 40)
-level_text = "Level Selection: Currently not available in demo"
-level_surface = level_font.render(level_text, True, (255, 255, 255))
-level_rect = level_surface.get_rect(center=(400, 320))
-# Definiing the menue text font 
+
+# Menue text fonts 
 for i, item in enumerate(menu_items):
     menu_text = menu_font.render(item, True, (255, 255, 255))
     menu_rect = menu_text.get_rect(center=(400, 320 + i * 40))
@@ -29,7 +20,7 @@ def draw_menu(screen):
     screen.fill((0, 0, 0))  
     for menu_text, menu_rect in menu_rects:
         screen.blit(menu_text, menu_rect)
-# drawing setting back ground (currently it will be black sicne I don't have a menue)
+# drawing setting back ground (currently it will be black sicne I dont have a menue)
 def draw_setting_screen(screen):
     screen.fill((0, 0, 0))  
     screen.blit(setting_surface, setting_rect)
@@ -50,4 +41,6 @@ def handle_menu_events():
                 if menu_rect.collidepoint(event.pos):
                     if i == 0:  
                         return True
+                    if i == 2:
+                        return "Quit"
     return None
