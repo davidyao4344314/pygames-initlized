@@ -75,6 +75,24 @@ class cell(GravityAffected):
             print("Cell is dead.")
             self.kill()
 
+    """This function is for drawing the health bar 
+    """
+    def draw_health_bar(self, surface):
+        bar_width = 200  
+        bar_height = 20  
+        player_fill = (self.health / self.max_health) * bar_width
+
+        if self.health > 50:
+            player_color = (0, 255, 0)  
+        elif self.health > 20:
+            player_color = (255, 165, 0)  
+        else:
+            player_color = (255, 0, 0)  
+
+        # Draw the health bar at the top of the screen
+        pygame.draw.rect(surface, player_color, (50, 10, player_fill, bar_height))
+        pygame.draw.rect(surface, (255, 255, 255), (50, 10, bar_width, bar_height), 2)
+
 
 """
 Create the enemy class 'Virus' that inherits from GravityAffected
@@ -108,7 +126,7 @@ class Virus(GravityAffected):
             if self.attack_timer <= 0:
                 self.is_attacking = False
                 self.image = self.original_image
-
+    
     """
     This function is for attacking the enemy
     """
@@ -118,6 +136,26 @@ class Virus(GravityAffected):
             self.attack_timer = self.attack_duration
             self.image = self.attack_image
             target.take_damage(20)
+            
+    """This function is for drawing the health bar 
+    """
+    def draw_health_bar(self, surface):
+        bar_width = 50  
+        bar_height = 5  
+        fill = (self.health / self.max_health) * bar_width
+
+        if self.health > 50:
+            color = (0, 255, 0)  
+        elif self.health > 20:
+            color = (255, 165, 0)  
+        else:
+            color = (255, 0, 0)  
+
+        bar_x = self.rect.x + (self.rect.width - bar_width) // 2
+        bar_y = self.rect.y - 10  
+
+        pygame.draw.rect(surface, color, (bar_x, bar_y, fill, bar_height))
+        pygame.draw.rect(surface, (255, 255, 255), (bar_x, bar_y, bar_width, bar_height), 2)
 
     """
     This function is for ranged attack
@@ -135,3 +173,8 @@ class Virus(GravityAffected):
         if self.health <= 0:
             print("Virus is dead.")
             self.kill()
+    """
+    Adding a healing 
+    """
+    def healing(self):
+        self.health += 20
