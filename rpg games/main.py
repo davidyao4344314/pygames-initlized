@@ -1,16 +1,14 @@
 import pygame
 from sprite import cell, Virus  
 import controls
-from menu import draw_menu, handle_menu_events
+from menu import draw_menu, draw_setting_screen, draw_level_selection_screen, handle_menu_events
 
 pygame.init()
 
-# Get the screen resolution of the user display
+# Fullscreen setup
 info = pygame.display.Info()
 SCREEN_WIDTH = info.current_w
 SCREEN_HEIGHT = info.current_h
-
-# Set up the game window to match the screen resolution so it completly fit it
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
 pygame.display.set_caption('RPG')
 
@@ -92,16 +90,25 @@ while run:
         menu_action = handle_menu_events()
         if menu_action == True: 
             game_state = "game"
-        elif menu_action == "Quit":
-            run = False  
+        elif menu_action == "settings":
+            game_state = "settings"
+        elif menu_action == "level_selection":
+            game_state = "level_selection"
+
     elif game_state == "settings":
         draw_setting_screen(screen)
+        if handle_menu_events() == True:  
+            game_state = "menu"
 
     elif game_state == "level_selection":
         draw_level_selection_screen(screen)
         if handle_menu_events() == True:  
             game_state = "menu"
     
+    elif game_state == "Quit":
+        pygame.quit()
+
+
     pygame.display.update()
     clock.tick(60)
 

@@ -10,7 +10,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # The menu options
 menu_font = pygame.font.SysFont(None, 36)
-menu_items = ["Resume Game", "Quit"]
+menu_items = ["Resume Game", "Quit","Setting"]
 menu_rects = []
 
 # Menu text fonts 
@@ -38,6 +38,7 @@ def draw_level_selection_screen(screen):
     screen.blit(level_surface, level_rect)
 # exepcting inputs
 def handle_menu_events():
+    i = 0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
@@ -51,6 +52,8 @@ def handle_menu_events():
                         return True
                     if i == 2:
                         return "Quit"
+                    if i == 3:
+                        return "Settings"
     return None
 # The options 
 # option one for the settins 
