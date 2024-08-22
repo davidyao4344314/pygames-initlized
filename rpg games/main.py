@@ -5,11 +5,12 @@ from menu import draw_menu, handle_menu_events
 
 pygame.init()
 
-# Fullscreen setup
+# Get the screen resolution of the user display
 info = pygame.display.Info()
 SCREEN_WIDTH = info.current_w
 SCREEN_HEIGHT = info.current_h
 
+# Set up the game window to match the screen resolution so it completly fit it
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
 pygame.display.set_caption('RPG')
 
@@ -58,8 +59,8 @@ game_state = "menu"
 run = True
 clock = pygame.time.Clock()
 
+# Main game loop
 while run:
-    # Checking if the user choosen to open the game or not
     if game_state == "game":
         screen.fill((0, 0, 0))  # Fill the screen with black before drawing
         
@@ -78,6 +79,7 @@ while run:
         # Handle movement
         run = controls.handle_events(player1, enemy)
         controls.move_player(player1)
+        
         # Healing objects 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -85,15 +87,21 @@ while run:
                     healing_active = True
                 if event.key == pygame.K_ESCAPE:
                     game_state = "menu"  
-    # Menue option 
     elif game_state == "menu":
         draw_menu(screen)
         menu_action = handle_menu_events()
         if menu_action == True: 
             game_state = "game"
+        elif menu_action == "Quit":
+            run = False  
+    elif game_state == "settings":
+        draw_setting_screen(screen)
 
-
-
+    elif game_state == "level_selection":
+        draw_level_selection_screen(screen)
+        if handle_menu_events() == True:  
+            game_state = "menu"
+    
     pygame.display.update()
     clock.tick(60)
 

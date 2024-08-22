@@ -3,18 +3,26 @@ import pygame
 # Initialize Pygame 
 pygame.font.init()
 
+# Create the screen first so you can use it to center the menu
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # The menu options
 menu_font = pygame.font.SysFont(None, 36)
 menu_items = ["Resume Game", "Quit"]
 menu_rects = []
 
-
-# Menue text fonts 
-for i, item in enumerate(menu_items):
+# Menu text fonts 
+i = 0
+while i < len(menu_items):
+    item = menu_items[i]
     menu_text = menu_font.render(item, True, (255, 255, 255))
-    menu_rect = menu_text.get_rect(center=(400, 320 + i * 40))
+    menu_rect = menu_text.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 + i * 40))
     menu_rects.append((menu_text, menu_rect))
+    i += 1
+
+
 # draw the menu screen 
 def draw_menu(screen):
     screen.fill((0, 0, 0))  
@@ -44,3 +52,9 @@ def handle_menu_events():
                     if i == 2:
                         return "Quit"
     return None
+# The options 
+# option one for the settins 
+setting_font = pygame.font.SysFont(None, 40)
+setting_text = "Settings: Currently not available in the demo"
+setting_surface = setting_font.render(setting_text, True, (255, 255, 255))
+setting_rect = setting_surface.get_rect(center=(400, 320))
