@@ -26,15 +26,15 @@ def handle_events(player, enemy):
                 player.melee_attack(enemy)
             if event.key == pygame.K_l:
                 player.defend()
+            if event.key == pygame.K_ESCAPE:
+                return "menu"  # Fixing the typo "menue" to "menu" to match game state
         if event.type == pygame.KEYUP:
             if event.key in keys:
                 keys[event.key] = False
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            return "menu"
     return True
 
 """
-Accepting input for the controls
+Acepiting input for the controls
 """
 def move_player(player):
     dx = 0
