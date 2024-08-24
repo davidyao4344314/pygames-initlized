@@ -29,11 +29,12 @@ def handle_events(player, enemy):
         if event.type == pygame.KEYUP:
             if event.key in keys:
                 keys[event.key] = False
-        if event.key == pygame.K_ESCAPE:
-            return "menue" 
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            return "menu"
     return True
+
 """
-Acepiting input for the controls
+Accepting input for the controls
 """
 def move_player(player):
     dx = 0
