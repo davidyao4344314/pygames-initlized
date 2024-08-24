@@ -57,6 +57,12 @@ game_state = "menu"
 run = True
 clock = pygame.time.Clock()
 
+healing_active = False
+healing_amount = 20
+
+healing_active = False
+healing_amount = 20
+
 # Main game loop
 while run:
     if game_state == "game":
@@ -68,8 +74,10 @@ while run:
         # Draw health bar
         draw_health_bar(screen, player1)
 
+        # Draw healing image if healing is active
         if healing_active:
-            screen.blit(healing_image, (50, 40))    
+            healing_position = (SCREEN_WIDTH - healing_image.get_width() - 10, SCREEN_HEIGHT - healing_image.get_height() - 10)
+            screen.blit(healing_image, healing_position)
 
         # Draw all sprites
         all_sprites.draw(screen)
@@ -82,7 +90,9 @@ while run:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_i:
-                    healing_active = True
+                    if not healing_active and player1.health < player1.max_health:
+                        healing_active = True
+                        player1.health = min(player1.health + healing_amount, player1.max_health)
                 if event.key == pygame.K_ESCAPE:
                     game_state = "menu"  
     elif game_state == "menu":
@@ -104,10 +114,9 @@ while run:
         draw_level_selection_screen(screen)
         if handle_menu_events() == True:  
             game_state = "menu"
-    
-    elif game_state == "Quit":
-        pygame.quit()
 
+    elif game_state == "Quit":
+        run = False
 
     pygame.display.update()
     clock.tick(60)
