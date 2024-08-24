@@ -15,7 +15,7 @@ keys = {
     pygame.K_ESCAPE: False
 }
 
-def handle_events(player, enemy):
+def handle_events(player1):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
@@ -23,32 +23,26 @@ def handle_events(player, enemy):
             if event.key in keys:
                 keys[event.key] = True
             if event.key == pygame.K_k:
-                player.melee_attack(enemy)
+                player1.melee_attack()
             if event.key == pygame.K_l:
                 player.defend()
             if event.key == pygame.K_ESCAPE:
-                return "menu"  # Fixing the typo "menue" to "menu" to match game state
+                return "menu"  
         if event.type == pygame.KEYUP:
             if event.key in keys:
                 keys[event.key] = False
     return True
 
-"""
-Acepiting input for the controls
-"""
-def move_player(player):
-    dx = 0
-    dy = 0
+def move_player(player1):
     if keys[pygame.K_a]:
         dx = -1
     if keys[pygame.K_d]:
         dx = 1
     if keys[pygame.K_w] or keys[pygame.K_SPACE]:
-        dy = -1
+        player1.move(dy=-1)
     if keys[pygame.K_LEFT]:
-        dx = -1
+        player1.move(dx=-1)
     if keys[pygame.K_RIGHT]:
-        dx = 1
+        player1.move(dx=1)
     if keys[pygame.K_UP]:
-        dy = -1
-    player.move(dx, dy)
+        player1.move(dy=-1)

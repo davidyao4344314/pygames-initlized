@@ -1,15 +1,14 @@
 import pygame
-from sprite import cell, Virus  
+from sprite import cell, Virus
 import controls
-from menu import draw_menu, draw_setting_screen, draw_level_selection_screen, handle_menu_events
 
 pygame.init()
 
-# Fullscreen setup
-info = pygame.display.Info()
-SCREEN_WIDTH = info.current_w
-SCREEN_HEIGHT = info.current_h
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
+# Initializing player screen
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('RPG')
 
 # Player gravity
@@ -18,15 +17,13 @@ gravity = 0.5
 # Load player images
 player_image = pygame.image.load('white_blood_cell.png')
 attack_image = pygame.image.load('white_blood_cell_attack.png')
-defense_image = pygame.image.load('white_blood_cell_attack.png')
-healing_image = pygame.image.load('healing.png')
 
-# Load virus images (same as player for now since I don't have another sprite)
+# Load virus images (same as player for now)
 virus_image = pygame.image.load('white_blood_cell.png')
 virus_attack_image = pygame.image.load('white_blood_cell_attack.png')
 
 # Initialize player instance
-player1 = cell(200, 200, 3, player_image, attack_image, defense_image)
+player1 = cell(200, 200, 3, player_image, attack_image)
 
 # Initialize enemy instance
 enemy = Virus(600, 200, 3, virus_image, virus_attack_image)
@@ -36,78 +33,86 @@ all_sprites = pygame.sprite.Group()
 all_sprites.add(player1)
 all_sprites.add(enemy)
 
-def draw_health_bar(surface, player):
-    bar_width = 200
-    bar_height = 20
-    player_fill = (player.health / player.max_health) * bar_width
+# Define menu options
+menu_font = pygame.font.SysFont(None, 36)
+menu_items = ["Resume Game", "Settings", "Level Selection"]
+menu_rects = []
 
-    if player.health > 50:
-        player_color = (0, 255, 0)
-    elif player.health > 20:
-        player_color = (255, 165, 0)
-    else:
-        player_color = (255, 0, 0)
+# Define the setting 
+setting_font = pygame.font.SysFont(None, 40)
+setting_text = "Settings: Currently not available in demo"
+setting_surface = setting_font.render(setting_text, True, (255, 255, 255))
+setting_rect = setting_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+# define the level slection fonts
+level_font = pygame.font.SysFont(None, 40)
+level_text = "Level Selection: Currently not available in demo"
+level_surface = level_font.render(level_text, True, (255, 255, 255))
+level_rect = level_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
 
-    pygame.draw.rect(surface, player_color, (50, 10, player_fill, bar_height))
-    pygame.draw.rect(surface, (255, 255, 255), (50, 10, bar_width, bar_height), 2)
+for i, item in enumerate(menu_items):
+    menu_text = menu_font.render(item, True, (255, 255, 255))
+    menu_rect = menu_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 40))
+    menu_rects.append((menu_text, menu_rect))
 
-healing_active = False
-game_state = "menu"  
+def draw_menu():
+    screen.fill((0, 0, 0))  
+    for menu_text, menu_rect in menu_rects:
+        screen.blit(menu_text, menu_rect)
+
+def draw_setting_screen():
+    screen.fill((0, 0, 0))  
+    screen.blit(setting_surface, setting_rect)
+
+def draw_level_selection_screen():
+    screen.fill((0, 0, 0))
+    screen.blit(level_surface, level_rect)
 
 run = True
+paused = False
+#Defining the current screan
+current_screen = "menu"
 clock = pygame.time.Clock()
 
-# Main game loop
 while run:
-    if game_state == "game":
-        screen.fill((0, 0, 0))  # Fill the screen with black before drawing
-        
-        # Update all sprites
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                if current_screen == "menu":
+                    paused = not paused
+                    if paused:
+                        # to fix the issue that the character keep moving foward even though they are no key are pressed
+                        controls.keys = {key: False for key in controls.keys}
+                else:
+                    current_screen = "menu"
+        if event.type == pygame.MOUSEBUTTONDOWN and paused and current_screen == "menu":
+            for i, (menu_text, menu_rect) in enumerate(menu_rects):
+                if menu_rect.collidepoint(event.pos):
+                    # resume game
+                    if i == 0:
+                        paused = False
+                        controls.keys = {key: False for key in controls.keys}
+                        #setting
+                    elif i == 1:
+                        current_screen = "settings"
+                        # level selection
+                    elif i == 2:
+                        current_screen = "level_selection"
+
+    if not paused:
+        screen.fill((0, 0, 0))
         all_sprites.update(gravity, SCREEN_HEIGHT)
-
-        # Draw health bar
-        draw_health_bar(screen, player1)
-
-        if healing_active:
-            screen.blit(healing_image, (50, 40))    
-
-        # Draw all sprites
         all_sprites.draw(screen)
-        
-        # Handle movement
         run = controls.handle_events(player1, enemy)
         controls.move_player(player1)
-        
-        # Healing objects 
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_i:
-                    healing_active = True
-                if event.key == pygame.K_ESCAPE:
-                    game_state = "menu"  
-    elif game_state == "menu":
-        draw_menu(screen)
-        menu_action = handle_menu_events()
-        if menu_action == True: 
-            game_state = "game"
-        elif menu_action == "settings":
-            game_state = "settings"
-        elif menu_action == "level_selection":
-            game_state = "level_selection"
-
-    elif game_state == "settings":
-        draw_setting_screen(screen)
-        if handle_menu_events() == True:  
-            game_state = "menu"
-
-    elif game_state == "level_selection":
-        draw_level_selection_screen(screen)
-        if handle_menu_events() == True:  
-            game_state = "menu"
-    
-    elif game_state == "Quit":
-        pygame.quit()
-
+    else:
+        if current_screen == "menu":
+            draw_menu()
+        elif current_screen == "settings":
+            draw_setting_screen()
+        elif current_screen == "level_selection":
+            draw_level_selection_screen()
 
     pygame.display.update()
     clock.tick(60)
