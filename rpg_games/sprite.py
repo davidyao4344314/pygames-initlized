@@ -160,10 +160,9 @@ class Virus(GravityAffected):
     """
     This function is for ranged attack
     """
-    """
     def ranged_attack(self):
         print("Ranged attack")
-    """
+
     """
     This function is for taking damage
     """
